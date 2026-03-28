@@ -6,10 +6,8 @@ const Navbar = () => (
   <nav className="fixed top-0 left-0 right-0 z-50 glass-card border-b border-border/50">
     <div className="container mx-auto px-6 h-16 flex items-center justify-between">
       <Link to="/" className="flex items-center gap-2 font-bold text-xl text-foreground">
-        <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center">
-          <Sparkles className="text-primary-foreground" size={18} />
-        </div>
-        HostelAI
+          <img src="/icon.png" alt="HostelAI Logo" className="w-8 h-8 object-contain" />
+          HostelAI
       </Link>
 
       <div className="hidden md:flex items-center gap-6">
