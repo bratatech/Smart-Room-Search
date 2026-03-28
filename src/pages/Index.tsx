@@ -17,9 +17,7 @@ const Index = () => (
     <footer className="border-t border-border py-8 px-6">
       <div className="container mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-2 font-bold text-foreground">
-          <div className="w-6 h-6 rounded-md gradient-primary flex items-center justify-center">
-            <Sparkles className="text-primary-foreground" size={14} />
-          </div>
+            <img src="/iconn.png" alt="HostelAI Logo" className="w-8 h-8 object-contain" />
           Residential Nexus
         </div>
         <p className="text-sm text-muted-foreground">© 2026 Residential Nexus. Built for students, powered by AI.</p>
