@@ -7,7 +7,7 @@ const Navbar = () => (
     <div className="container mx-auto px-6 h-16 flex items-center justify-between">
       <Link to="/" className="flex items-center gap-2 font-bold text-xl text-foreground">
           <img src="/iconn.png" alt="HostelAI Logo" className="w-8 h-8 object-contain" />
-          HostelAI
+          Resedential Nexus
       </Link>
 
       <div className="hidden md:flex items-center gap-6">

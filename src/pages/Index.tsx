@@ -20,9 +20,9 @@ const Index = () => (
           <div className="w-6 h-6 rounded-md gradient-primary flex items-center justify-center">
             <Sparkles className="text-primary-foreground" size={14} />
           </div>
-          HostelAI
+          Residential Nexus
         </div>
-        <p className="text-sm text-muted-foreground">© 2026 HostelAI. Built for students, powered by AI.</p>
+        <p className="text-sm text-muted-foreground">© 2026 Residential Nexus. Built for students, powered by AI.</p>
       </div>
     </footer>
   </div>

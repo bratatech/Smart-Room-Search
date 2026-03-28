@@ -38,7 +38,7 @@ const FeaturesSection = () => (
         className="text-center mb-16"
       >
         <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
-          Why Choose <span className="gradient-text">HostelAI</span>?
+          Why Choose <span className="gradient-text">Residential Nexus</span>?
         </h2>
         <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
           Powered by artificial intelligence to make your hostel search smarter, faster, and more personalized.
