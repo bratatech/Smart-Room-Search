@@ -23,10 +23,9 @@ const StudentDashboard = () => {
       <nav className="sticky top-0 z-50 glass-card border-b border-border/50">
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">
           <button onClick={() => navigate("/")} className="flex items-center gap-2 font-bold text-xl text-foreground">
-            <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center">
+            <img src="/iconn.png" alt="HostelAI Logo" className="w-8 h-8 object-contain" />
               <Sparkles className="text-primary-foreground" size={18} />
-            </div>
-            HostelAI
+            Residential Nexus
           </button>
 
           <div className="hidden md:flex flex-1 max-w-lg mx-8">

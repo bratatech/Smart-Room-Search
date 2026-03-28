@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Brain, Camera, BarChart3, CreditCard } from "lucide-react";
+import { Brain, Camera, BarChart3, CreditCard, GraduationCap } from "lucide-react";
 
 const features = [
   {
@@ -13,6 +13,12 @@ const features = [
     title: "Image-Based Discovery",
     description: "Upload a photo to find similar rooms instantly.",
     gradient: "from-accent to-accent/70",
+  },
+  {
+    icon: GraduationCap,
+    title: "Student-first Focus",
+    description: "Only for student, simple, affordable, and reliable.",
+    gradient: "from-primary to-accent",
   },
   {
     icon: BarChart3,

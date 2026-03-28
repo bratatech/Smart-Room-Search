@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -19,6 +19,28 @@ const OwnerDashboard = () => {
   const params = new URLSearchParams(location.search);
   const [activeTab, setActiveTab] = useState<Tab>((params.get("tab") as Tab) || "dashboard");
 
+    // 🔔 Notification state (ADDED)
+  const [open, setOpen] = useState<boolean>(false);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const notifications = [
+    { id: 1, text: "New booking request received" },
+    { id: 2, text: "Rent payment received ₹5,500" },
+    { id: 3, text: "Maintenance request for Room 102" },
+  ];
+
+  // 🔔 Close on outside click (ADDED)
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const stats = [
     { label: "Total Properties", value: "3", icon: Home, color: "text-primary" },
     { label: "Occupancy Rate", value: "87%", icon: UserCheck, color: "text-emerald-500" },
@@ -38,10 +60,10 @@ const OwnerDashboard = () => {
       {/* Sidebar */}
       <aside className="hidden md:flex w-64 flex-col border-r border-border bg-card p-6">
         <button onClick={() => navigate("/")} className="flex items-center gap-2 font-bold text-xl text-foreground mb-8">
-          <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center">
+            <img src="/iconn.png" alt="HostelAI Logo" className="w-8 h-8 object-contain" />
             <Sparkles className="text-primary-foreground" size={18} />
-          </div>
-          HostelAI
+          
+          Resedential Nexus
         </button>
 
         <nav className="flex-1 space-y-1">
@@ -70,12 +92,54 @@ const OwnerDashboard = () => {
       <div className="flex-1">
         {/* Top bar */}
         <header className="sticky top-0 z-50 glass-card border-b border-border/50 px-6 h-14 flex items-center justify-between">
-          <h1 className="font-semibold text-foreground capitalize">{activeTab === "add" ? "Add Property" : activeTab}</h1>
+          <h1 className="font-semibold text-foreground capitalize">
+            {activeTab === "add" ? "Add Property" : activeTab}
+          </h1>
+
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon"><Bell size={18} /></Button>
+
+            {/* 🔔 Notification (UPDATED) */}
+            <div className="relative" ref={dropdownRef}>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setOpen(!open)}
+              >
+                <Bell size={18} />
+                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+              </Button>
+
+              {open && (
+                <div className="absolute right-0 mt-2 w-72 bg-popover border border-border rounded-xl shadow-lg p-3 z-50">
+                  <h3 className="text-sm font-semibold mb-2 text-foreground">
+                    Notifications
+                  </h3>
+
+                  <div className="space-y-2 max-h-60 overflow-y-auto">
+                    {notifications.map((n) => (
+                      <div
+                        key={n.id}
+                        className="text-sm text-muted-foreground p-2 rounded-md hover:bg-accent cursor-pointer"
+                      >
+                        {n.text}
+                      </div>
+                    ))}
+                  </div>
+
+                  {notifications.length === 0 && (
+                    <p className="text-sm text-muted-foreground text-center py-2">
+                      No notifications
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Avatar */}
             <div className="w-9 h-9 rounded-full gradient-primary flex items-center justify-center">
               <span className="text-primary-foreground text-sm font-semibold">O</span>
             </div>
+
           </div>
         </header>
 
@@ -101,7 +165,7 @@ const OwnerDashboard = () => {
                 {stats.map((s) => (
                   <div key={s.label} className="glass-card rounded-2xl p-5 hover-lift">
                     <div className="flex items-center justify-between mb-3">
-                      <s.icon className={s.color} size={22} />
+                      <s.icon className={s.color} size={24} />
                     </div>
                     <p className="text-2xl font-bold text-foreground">{s.value}</p>
                     <p className="text-sm text-muted-foreground">{s.label}</p>
