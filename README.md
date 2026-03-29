@@ -125,7 +125,7 @@ Score rooms based on:
 
 ### Database
 
- MongoDB (store room metadata)
+ Postgresql (store room metadata)
  Vector DB (optional but powerful):
 
    FAISS / Pinecone
