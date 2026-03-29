@@ -14,8 +14,12 @@ const StudentDashboard = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [priceRange, setPriceRange] = useState([6000]);
   const [showFilters, setShowFilters] = useState(false);
+  const [searchImage, setSearchImage] = useState<File | null>(null);
 
   const filteredHostels = hostels.filter((h) => h.price <= priceRange[0]);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.[0]) setSearchImage(e.target.files[0]);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -108,10 +112,14 @@ const StudentDashboard = () => {
           )}
 
           {/* Image Upload */}
-          <div className="glass-card rounded-2xl p-6 border-dashed border-2 border-border text-center cursor-pointer hover:border-primary/40 transition-colors">
-            <Upload className="mx-auto text-muted-foreground mb-2" size={24} />
-            <p className="text-sm text-muted-foreground">Drag & drop a room photo to find similar hostels</p>
-          </div>
+          <label className="flex flex-col items-center justify-center text-center gap-2 p-4 border-2 border-dashed border-border rounded-xl cursor-pointer hover:border-primary/30 transition-colors">
+                    <Upload size={20} className="text-muted-foreground" />
+                    <div>
+                      <p className="text-sm font-medium text-foreground">{searchImage ? searchImage.name : "Drag & drop a room photo to find similar hostels"}</p>
+                      <p className="text-xs text-muted-foreground">PDF, JPG, PNG (Max 5MB)</p>
+                    </div>
+                    <input type="file" className="hidden" accept=".pdf,.jpg,.jpeg,.png" onChange={handleFileChange} />
+                  </label>
         </motion.div>
 
         {/* AI Recommendations */}

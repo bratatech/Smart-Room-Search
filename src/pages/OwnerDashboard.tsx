@@ -34,6 +34,7 @@ const OwnerDashboard = () => {
   const [showAllocation, setShowAllocation] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState<BookingRequest | null>(null);
   const [showAddAccount, setShowAddAccount] = useState(false);
+  const [searchImage, setSearchImage] = useState<File | null>(null);
 
   const notifications = [
     { id: 1, text: "New booking request received" },
@@ -67,6 +68,9 @@ const OwnerDashboard = () => {
   ];
 
   const pendingRequestsCount = requests.filter(r => r.status === "pending").length;
+   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.[0]) setSearchImage(e.target.files[0]);
+  };
 
   const handleAcceptRequest = (req: BookingRequest) => {
     if (req.type === "booking") {
@@ -301,10 +305,14 @@ const OwnerDashboard = () => {
                 </div>
                 <div>
                   <label className="text-sm font-medium text-foreground mb-1 block">Upload Images</label>
-                  <div className="border-2 border-dashed border-border rounded-xl p-8 text-center hover:border-primary/30 transition-colors cursor-pointer">
-                    <Upload size={32} className="mx-auto text-muted-foreground mb-2" />
-                    <p className="text-sm text-muted-foreground">Drag & drop images or click to browse</p>
-                  </div>
+                  <label className="flex flex-col items-center justify-center text-center gap-2 p-4 border-2 border-dashed border-border rounded-xl cursor-pointer hover:border-primary/30 transition-colors">
+                    <Upload size={20} className="text-muted-foreground" />
+                    <div>
+                      <p className="text-sm font-medium text-foreground">{searchImage ? searchImage.name : "Drag & drop a room photo to find similar hostels"}</p>
+                      <p className="text-xs text-muted-foreground">PDF, JPG, PNG (Max 5MB)</p>
+                    </div>
+                    <input type="file" className="hidden" accept=".pdf,.jpg,.jpeg,.png" onChange={handleFileChange} />
+                  </label>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-foreground mb-1 block">Facilities</label>
