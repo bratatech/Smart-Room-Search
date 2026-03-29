@@ -68,9 +68,10 @@ const AuthPage = () => {
           className="text-center relative z-10 p-12"
         >
           <div className="w-20 h-20 rounded-2xl bg-primary-foreground/20 flex items-center justify-center mx-auto mb-6">
-            <Sparkles className="text-primary-foreground" size={40} />
+            <img src="/iconn.png" alt="HostelAI Logo" className="w-[68px] h-[68px] object-contain" />
+            
           </div>
-          <h2 className="text-4xl font-bold text-primary-foreground mb-4">Welcome to HostelAI</h2>
+          <h2 className="text-4xl font-bold text-primary-foreground mb-4">Welcome to Resedential Nexus</h2>
           <p className="text-primary-foreground/80 text-lg max-w-md">
             Your AI-powered companion for finding the perfect student accommodation.
           </p>

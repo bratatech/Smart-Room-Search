@@ -5,6 +5,7 @@ import {
   LayoutDashboard, Building2, Users, CreditCard, Plus, Bell, LogOut, Sparkles,
   TrendingUp, Home, IndianRupee, UserCheck, Upload, Phone, ClipboardList,
   Eye, CheckCircle2, XCircle, Calendar, Smartphone, Building, Star, Trash2,
+  MapPin
 } from "lucide-react";
 import AddPaymentAccountDialog from "@/components/AddPaymentAccountDialog";
 import AllocationDialog from "@/components/AllocationDialog";
@@ -12,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
-//import { tenants } from "@/data/mockData";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import {
   tenants, bookingRequests as initialRequests, paymentAccounts as initialAccounts,
   BookingRequest, PaymentAccount
@@ -20,21 +21,45 @@ import {
 
 type Tab = "dashboard" | "add" | "tenants" | "payments" | "requests";
 
+// Define libraries outside to prevent unnecessary re-renders
+const libraries: ("places")[] = ["places"];
+
 const OwnerDashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const [activeTab, setActiveTab] = useState<Tab>((params.get("tab") as Tab) || "dashboard");
-
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
   const [requests, setRequests] = useState<BookingRequest[]>(initialRequests);
   const [accounts, setAccounts] = useState<PaymentAccount[]>(initialAccounts);
   const [showAllocation, setShowAllocation] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState<BookingRequest | null>(null);
   const [showAddAccount, setShowAddAccount] = useState(false);
   const [searchImage, setSearchImage] = useState<File | null>(null);
+
+  // --- MAP STATES ---
+  const [markerPosition, setMarkerPosition] = useState({ lat: 12.9716, lng: 77.5946 });
+  const [address, setAddress] = useState("");
+
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: "YOUR_GOOGLE_MAPS_API_KEY", // <--- REPLACE THIS WITH REAL KEY
+    libraries
+  });
+
+  // --- MAP HANDLERS ---
+  const onMapClick = (e: google.maps.MapMouseEvent) => {
+    if (e.latLng) {
+      setMarkerPosition({ lat: e.latLng.lat(), lng: e.latLng.lng() });
+    }
+  };
+
+  const onMarkerDragEnd = (e: google.maps.MapMouseEvent) => {
+    if (e.latLng) {
+      setMarkerPosition({ lat: e.latLng.lat(), lng: e.latLng.lng() });
+    }
+  };
 
   const notifications = [
     { id: 1, text: "New booking request received" },
@@ -68,7 +93,8 @@ const OwnerDashboard = () => {
   ];
 
   const pendingRequestsCount = requests.filter(r => r.status === "pending").length;
-   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) setSearchImage(e.target.files[0]);
   };
 
@@ -111,6 +137,7 @@ const OwnerDashboard = () => {
     tenants: "Tenants",
     payments: "Payments",
   };
+  
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -120,7 +147,6 @@ const OwnerDashboard = () => {
           <Sparkles size={24} className="text-primary" />
           Residential Nexus
         </button>
-
         <nav className="flex-1 space-y-1">
           {sidebarItems.map((item) => (
             <button
@@ -142,7 +168,6 @@ const OwnerDashboard = () => {
             </button>
           ))}
         </nav>
-
         <Button variant="outline" onClick={() => navigate("/")} className="rounded-xl">
           <LogOut size={16} className="mr-2" /> Log Out
         </Button>
@@ -151,30 +176,32 @@ const OwnerDashboard = () => {
       {/* Main */}
       <div className="flex-1 lg:ml-64">
         {/* Top bar */}
-        <header className="sticky top-0 z-30 bg-card/80 backdrop-blur-lg border-b border-border px-4 lg:px-8 py-4        flex items-center justify-between">
-         <h1 className="text-lg lg:text-xl font-bold text-foreground">{tabTitles[activeTab]}</h1> 
-         <div className="flex items-center gap-3"> 
-          <div ref={dropdownRef} className="relative">
-             <button className="relative p-2 rounded-xl hover:bg-secondary transition-colors" 
-             onClick={() =>        setOpen(!open)}> 
-              <Bell size={20} className="text-muted-foreground" /> 
-             <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-destructive" /> 
-             </button> {open && ( <div className="absolute right-0 mt-2 w-72 glass-card rounded-xl shadow-lg 
-             border border-border overflow-hidden">
-           <div className="p-3 border-b border-border"> 
-            <p className="font-semibold 
-           text-sm text-foreground">Notifications
-           </p> 
-           </div>
-         <div className="max-h-60 overflow-y-auto"> {notifications.map((n) => ( <div key={n.id} 
-         className="px-3 py-2.5 hover:bg-secondary/50 transition-colors border-b border-border last:border-0"> 
-         <p className="text-sm text-foreground">{n.text}</p> </div> ))} 
-         </div> 
-        </div> )}
-         </div> 
-        <div className="w-9 h-9 rounded-full gradient-primary flex items-center justify-center 
-        text-primary-foreground font-bold text-sm">O</div> 
-        </div> 
+        <header className="sticky top-0 z-30 bg-card/80 backdrop-blur-lg border-b border-border px-4 lg:px-8 py-4 flex items-center justify-between">
+          <h1 className="text-lg lg:text-xl font-bold text-foreground">{tabTitles[activeTab]}</h1> 
+          <div className="flex items-center gap-3"> 
+            <div ref={dropdownRef} className="relative">
+              <button className="relative p-2 rounded-xl hover:bg-secondary transition-colors" 
+                onClick={() => setOpen(!open)}> 
+                <Bell size={20} className="text-muted-foreground" /> 
+                <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-destructive" /> 
+              </button> 
+              {open && ( 
+                <div className="absolute right-0 mt-2 w-72 glass-card rounded-xl shadow-lg border border-border overflow-hidden">
+                  <div className="p-3 border-b border-border"> 
+                    <p className="font-semibold text-sm text-foreground">Notifications</p> 
+                  </div>
+                  <div className="max-h-60 overflow-y-auto"> 
+                    {notifications.map((n) => ( 
+                      <div key={n.id} className="px-3 py-2.5 hover:bg-secondary/50 transition-colors border-b border-border last:border-0"> 
+                        <p className="text-sm text-foreground">{n.text}</p> 
+                      </div> 
+                    ))} 
+                  </div> 
+                </div> 
+              )}
+            </div> 
+            <div className="w-9 h-9 rounded-full gradient-primary flex items-center justify-center text-primary-foreground font-bold text-sm">O</div> 
+          </div> 
         </header>
 
         {/* Mobile nav */}
@@ -299,19 +326,61 @@ const OwnerDashboard = () => {
                     <Input type="number" placeholder="₹ 0" className="rounded-xl" />
                   </div>
                 </div>
+                
+                {/* Location Picker */}
                 <div>
                   <label className="text-sm font-medium text-foreground mb-1 block">Location</label>
-                  <Input placeholder="Full address" className="rounded-xl" />
+                  <div className="relative mb-3">
+                    <Input 
+                      placeholder="Search or drag pin on map" 
+                      className="rounded-xl pl-10" 
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                    />
+                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
+                  </div>
+                  
+                  {/* Google Map Implementation */}
+                  <div className="rounded-xl overflow-hidden border border-border h-[300px] relative">
+                    {isLoaded ? (
+                      <GoogleMap
+                        mapContainerStyle={{ width: '100%', height: '100%' }}
+                        center={markerPosition}
+                        zoom={15}
+                        onClick={onMapClick}
+                        options={{
+                          disableDefaultUI: true,
+                          zoomControl: true,
+                        }}
+                      >
+                        <Marker 
+                          position={markerPosition} 
+                          draggable={true}
+                          onDragEnd={(e) => {
+                            if(e.latLng) setMarkerPosition({ lat: e.latLng.lat(), lng: e.latLng.lng() });
+                          }}
+                        />
+                      </GoogleMap>
+                    ) : (
+                      <div className="w-full h-full bg-secondary animate-pulse flex items-center justify-center text-muted-foreground">
+                        Loading Map...
+                      </div>
+                    )}
+                    <div className="absolute bottom-3 left-3 bg-card/90 backdrop-blur px-3 py-1.5 rounded-lg border border-border text-[10px] text-muted-foreground">
+                      Lat: {markerPosition.lat.toFixed(4)}, Lng: {markerPosition.lng.toFixed(4)}
+                    </div>
+                  </div>
                 </div>
+
                 <div>
                   <label className="text-sm font-medium text-foreground mb-1 block">Upload Images</label>
                   <label className="flex flex-col items-center justify-center text-center gap-2 p-4 border-2 border-dashed border-border rounded-xl cursor-pointer hover:border-primary/30 transition-colors">
                     <Upload size={20} className="text-muted-foreground" />
                     <div>
-                      <p className="text-sm font-medium text-foreground">{searchImage ? searchImage.name : "Drag & drop a room photo to find similar hostels"}</p>
-                      <p className="text-xs text-muted-foreground">PDF, JPG, PNG (Max 5MB)</p>
+                      <p className="text-sm font-medium text-foreground">{searchImage ? searchImage.name : "Upload room photos"}</p>
+                      <p className="text-xs text-muted-foreground">JPG, PNG (Max 5MB)</p>
                     </div>
-                    <input type="file" className="hidden" accept=".pdf,.jpg,.jpeg,.png" onChange={handleFileChange} />
+                    <input type="file" className="hidden" accept=".jpg,.jpeg,.png" onChange={handleFileChange} />
                   </label>
                 </div>
                 <div>
@@ -322,7 +391,7 @@ const OwnerDashboard = () => {
                   <label className="text-sm font-medium text-foreground mb-1 block">Rules</label>
                   <Textarea placeholder="No smoking, Quiet hours..." className="rounded-xl" rows={2} />
                 </div>
-                <Button className="gradient-primary text-primary-foreground rounded-xl px-8">
+                <Button className="gradient-primary text-primary-foreground rounded-xl px-8 w-full sm:w-auto">
                   <Building2 size={16} className="mr-2" /> Add Property
                 </Button>
               </div>
@@ -352,8 +421,8 @@ const OwnerDashboard = () => {
                           <td className="p-4">
                             <Badge className={`rounded-full border-0 ${
                               t.rentStatus === "Paid"
-                                      ? "bg-green-500/10 text-green-600"
-                                      : "bg-destructive/10 text-destructive"
+                                ? "bg-green-500/10 text-green-600"
+                                : "bg-destructive/10 text-destructive"
                             }`}>
                               {t.rentStatus}
                             </Badge>
@@ -473,4 +542,3 @@ const OwnerDashboard = () => {
 };
 
 export default OwnerDashboard;
-
