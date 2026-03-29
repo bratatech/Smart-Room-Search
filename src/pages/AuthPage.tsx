@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Sparkles, Mail, Lock, User } from "lucide-react";
+import { Sparkles, Mail, Lock, User, Phone, MapPin, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -17,21 +17,90 @@ const AuthPage = () => {
     navigate(role === "student" ? "/student" : "/owner");
   };
 
-  const AuthForm = ({ role }: { role: string }) => (
+  const AuthForm = ({ role }: { role: string }) => {
+    const [fullName, setFullName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [aadharNo, setAadharNo] = useState("");
+    const [panNo, setPanNo] = useState("");
+    const [phoneNo, setPhoneNo] = useState("");
+    const [address, setAddress] = useState("");
+
+    return (
     <form onSubmit={(e) => handleSubmit(e, role)} className="space-y-4">
       {!isLogin && (
-        <div className="relative">
-          <User className="absolute left-3 top-3 text-muted-foreground" size={18} />
-          <Input placeholder="Full Name" className="pl-10 rounded-xl bg-secondary border-0" />
-        </div>
+        <>
+          <div className="relative">
+            <User className="absolute left-3 top-3 text-muted-foreground" size={18} />
+            <Input 
+              placeholder="Full Name" 
+              className="pl-10 rounded-xl bg-secondary border-0" 
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+            />
+          </div>
+          {role === "student" && (
+            <>
+              <div className="relative">
+                <CreditCard className="absolute left-3 top-3 text-muted-foreground" size={18} />
+                <Input 
+                  placeholder="Aadhar Number" 
+                  className="pl-10 rounded-xl bg-secondary border-0" 
+                  value={aadharNo}
+                  onChange={(e) => setAadharNo(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="relative">
+                <CreditCard className="absolute left-3 top-3 text-muted-foreground" size={18} />
+                <Input 
+                  placeholder="PAN Number" 
+                  className="pl-10 rounded-xl bg-secondary border-0" 
+                  value={panNo}
+                  onChange={(e) => setPanNo(e.target.value)}
+                />
+              </div>
+              <div className="relative">
+                <Phone className="absolute left-3 top-3 text-muted-foreground" size={18} />
+                <Input 
+                  placeholder="Phone Number" 
+                  className="pl-10 rounded-xl bg-secondary border-0" 
+                  value={phoneNo}
+                  onChange={(e) => setPhoneNo(e.target.value)}
+                />
+              </div>
+              <div className="relative">
+                <MapPin className="absolute left-3 top-3 text-muted-foreground" size={18} />
+                <Input 
+                  placeholder="Address" 
+                  className="pl-10 rounded-xl bg-secondary border-0" 
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                />
+              </div>
+            </>
+          )}
+        </>
       )}
       <div className="relative">
         <Mail className="absolute left-3 top-3 text-muted-foreground" size={18} />
-        <Input type="email" placeholder="Email" className="pl-10 rounded-xl bg-secondary border-0" />
+        <Input 
+          type="email" 
+          placeholder="Email" 
+          className="pl-10 rounded-xl bg-secondary border-0" 
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
       </div>
       <div className="relative">
         <Lock className="absolute left-3 top-3 text-muted-foreground" size={18} />
-        <Input type="password" placeholder="Password" className="pl-10 rounded-xl bg-secondary border-0" />
+        <Input 
+          type="password" 
+          placeholder="Password" 
+          className="pl-10 rounded-xl bg-secondary border-0" 
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
       </div>
 
       <Button type="submit" className="w-full gradient-primary text-primary-foreground rounded-xl h-11">
