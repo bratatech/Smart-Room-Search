@@ -44,7 +44,7 @@ const OwnerDashboard = () => {
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: "YOUR_GOOGLE_MAPS_API_KEY", // <--- REPLACE THIS WITH REAL KEY
+    googleMapsApiKey: "AIzaSyAqPp2kXmNBxo1B0wE_FLQIe5X43xT2EHM", // <--- REPLACE THIS WITH REAL KEY
     libraries
   });
 
