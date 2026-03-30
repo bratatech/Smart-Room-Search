@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Sparkles, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
+import ProfileMenu from "./ProfileMenu";
 
 const Navbar = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -61,6 +62,7 @@ const Navbar = () => {
           <Button size="sm" className="gradient-primary text-primary-foreground rounded-lg" asChild>
             <Link to="/auth?role=student">Sign Up</Link>
           </Button>
+          <ProfileMenu />
 
         </div>
       </div>

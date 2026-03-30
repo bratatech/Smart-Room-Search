@@ -10,7 +10,7 @@ import HostelDetail from "./pages/HostelDetail.tsx";
 import RentPage from "./pages/RentPage.tsx";
 import OwnerDashboard from "./pages/OwnerDashboard.tsx";
 import NotFound from "./pages/NotFound.tsx";
-
+import ProfileMenu from "./components/ProfileMenu";
 const queryClient = new QueryClient();
 
 const App = () => (
