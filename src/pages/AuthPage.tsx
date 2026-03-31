@@ -137,7 +137,7 @@ const AuthPage = () => {
           animate={{ opacity: 1, scale: 1 }}
           className="text-center relative z-10 p-12"
         >
-          <div className="w-20 h-20 rounded-2xl bg-primary-foreground/20 flex items-center justify-center mx-auto mb-6">
+          <div className="w-20 h-20  items-center justify-center mx-auto mb-6">
             <img src="/iconn.png" alt="HostelAI Logo" className="w-[68px] h-[68px] object-contain" />
             
           </div>

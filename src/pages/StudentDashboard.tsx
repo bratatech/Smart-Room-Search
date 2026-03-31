@@ -28,7 +28,7 @@ const StudentDashboard = () => {
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">
           <button onClick={() => navigate("/")} className="flex items-center gap-2 font-bold text-xl text-foreground">
             <img src="/iconn.png" alt="HostelAI Logo" className="w-8 h-8 object-contain" />
-              <Sparkles className="text-primary-foreground" size={18} />
+            
             Residential Nexus
           </button>
 
@@ -125,7 +125,7 @@ const StudentDashboard = () => {
         {/* AI Recommendations */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
           <div className="flex items-center gap-2 mb-6">
-            <Sparkles className="text-primary" size={20} />
+            <img src="/iconn.png" alt="HostelAI Logo" className="w-6 h-6 object-contain" />
             <h2 className="text-xl font-semibold text-foreground">AI Recommendations</h2>
           </div>
 

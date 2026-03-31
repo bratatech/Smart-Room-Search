@@ -144,7 +144,7 @@ const OwnerDashboard = () => {
       {/* Sidebar */}
       <div className="hidden lg:flex flex-col w-64 bg-card border-r border-border p-5 fixed h-full">
         <button onClick={() => navigate("/")} className="flex items-center gap-2 font-bold text-xl text-foreground mb-8">
-          <Sparkles size={24} className="text-primary" />
+          <img src="/iconn.png" alt="HostelAI Logo" className="w-7 h-7 object-contain" />
           Residential Nexus
         </button>
         <nav className="flex-1 space-y-1">
