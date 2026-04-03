@@ -529,6 +529,7 @@ const OwnerDashboard = () => {
           studentPhone={selectedRequest.phone}
           studentEmail={selectedRequest.email}
           paymentAccounts={accounts}
+          availableRooms={[]}
           onConfirm={handleAllocationConfirm}
         />
       )}

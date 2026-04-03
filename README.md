@@ -2,9 +2,30 @@ Alright, this is actually a very hackathon-winning kind of idea if you execute i
 
 ---
 
-# 🚀 AI-Powered Smart Room Booking System
+# 🚀 AI-Powered Smart Room Booking System - "Residential Nexus"
 
 (Not just booking — intelligent matching + visual understanding)
+
+> **Status**: 🟡 **MVP Frontend Complete** | Backend integration ready | Production deployment next
+
+---
+
+## 📊 Project Status
+
+| Component | Status | Notes |
+|-----------|--------|-------|
+| **Frontend UI** | ✅ 95% | All pages, components, responsive design complete |
+| **Routing** | ✅ 100% | Full SPA routing with React Router v6 |
+| **Mock Data** | ✅ 100% | Comprehensive test data for demo |
+| **API Integration** | 🟡 50% | Stubs created, ready for backend |
+| **Backend** | 🔴 0% | Not started - separate project required |
+| **AI/ML Services** | 🔴 0% | Not started - Python microservice needed |
+| **Database** | 🔴 0% | Not started |
+| **Production Deploy** | 🔴 0% | Ready after backend integration |
+
+---
+
+## 🎯 Current Status
 
 ---
 

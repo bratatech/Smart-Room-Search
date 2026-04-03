@@ -8,9 +8,11 @@ import AuthPage from "./pages/AuthPage.tsx";
 import StudentDashboard from "./pages/StudentDashboard.tsx";
 import HostelDetail from "./pages/HostelDetail.tsx";
 import RentPage from "./pages/RentPage.tsx";
-import OwnerDashboard from "./pages/OwnerDashboard.tsx";
 import NotFound from "./pages/NotFound.tsx";
-import ProfileMenu from "./components/ProfileMenu";
+import OwnerMainDashboard from "./pages/OwnerMainDashboard.tsx";
+import PropertyDashboard from "./pages/propertyDashboard.tsx";
+import AddProperty from "./pages/AddProperty.tsx";
+import OwnerProfile from "./pages/OwnerProfile.tsx";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -25,7 +27,10 @@ const App = () => (
           <Route path="/student" element={<StudentDashboard />} />
           <Route path="/student/hostel/:id" element={<HostelDetail />} />
           <Route path="/student/rent" element={<RentPage />} />
-          <Route path="/owner" element={<OwnerDashboard />} />
+          <Route path="/owner" element={<OwnerMainDashboard />} />
+          <Route path="/owner/property/:propertyId" element={<PropertyDashboard />} />
+          <Route path="/owner/add-property" element={<AddProperty />} />
+          <Route path="/owner/profile" element={<OwnerProfile />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

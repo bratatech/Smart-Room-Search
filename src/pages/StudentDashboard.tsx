@@ -51,7 +51,14 @@ const StudentDashboard = () => {
             <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
               <User size={18} className="text-primary" />
             </div>
-            <Button variant="ghost" size="icon" onClick={() => navigate("/")}><LogOut size={18} /></Button>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => navigate("/")}
+              aria-label="Logout"
+            >
+              <LogOut size={18} />
+            </Button>
           </div>
         </div>
       </nav>
@@ -64,15 +71,22 @@ const StudentDashboard = () => {
 
           <div className="glass-card-elevated rounded-2xl p-4 mb-4">
             <div className="flex items-center gap-3">
-              <Sparkles className="text-primary" size={20} />
+              <Sparkles className="text-primary" size={20} aria-hidden="true" />
               <Input
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Find quiet, affordable hostels with good food near campus..."
                 className="border-0 bg-transparent shadow-none focus-visible:ring-0 text-base"
+                aria-label="Search hostels"
               />
-              <Button variant="outline" size="icon" onClick={() => setShowFilters(!showFilters)} className="rounded-xl shrink-0">
-                <Sliders size={18} />
+              <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={() => setShowFilters(!showFilters)} 
+                className="rounded-xl shrink-0"
+                aria-label={showFilters ? "Hide filters" : "Show filters"}
+              >
+                <Sliders size={18} aria-hidden="true" />
               </Button>
             </div>
           </div>

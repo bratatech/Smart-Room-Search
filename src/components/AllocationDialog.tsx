@@ -8,15 +8,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { availableRooms, PaymentAccount } from "@/data/mockData";
+import { type PaymentAccount } from "@/data/ownerMockCompat";
 
-interface AllocationDialogProps {
+export interface AllocationDialogProps {
   open: boolean;
   onClose: () => void;
   studentName: string;
   studentPhone: string;
   studentEmail: string;
   paymentAccounts: PaymentAccount[];
+  availableRooms: any[];
   onConfirm: (data: AllocationData) => void;
 }
 
@@ -34,7 +35,7 @@ export interface AllocationData {
 }
 
 const AllocationDialog = ({
-  open, onClose, studentName, studentPhone, studentEmail, paymentAccounts, onConfirm
+  open, onClose, studentName, studentPhone, studentEmail, paymentAccounts, availableRooms, onConfirm
 }: AllocationDialogProps) => {
   const [step, setStep] = useState(1);
   const [selectedRoom, setSelectedRoom] = useState("");
@@ -49,11 +50,10 @@ const AllocationDialog = ({
   const [notes, setNotes] = useState("");
   const [showFinalConfirm, setShowFinalConfirm] = useState(false);
 
-  const roomData = availableRooms.find(r => r.id === selectedRoom);
-
+  const roomData = availableRooms.find(r => r.id === selectedRoom || r.roomNumber === selectedRoom);
   const handleRoomSelect = (roomId: string) => {
     setSelectedRoom(roomId);
-    const room = availableRooms.find(r => r.id === roomId);
+    const room = availableRooms.find(r => r.id === roomId || r.roomNumber === roomId);
     if (room) setPrice(String(room.price));
   };
 
@@ -61,8 +61,12 @@ const AllocationDialog = ({
     if (e.target.files?.[0]) setIdDocument(e.target.files[0]);
   };
 
-  const canProceedStep1 = selectedRoom && price && startDate && selectedAccount;
-  const canProceedStep2 = studentAddress && parentName && parentPhone;
+  const canProceedStep1 = availableRooms.length > 0 && selectedRoom && price && startDate && selectedAccount;
+  // This ensures that even if there are accidental spaces, it still validates
+const canProceedStep2 = 
+  studentAddress.trim().length > 0 && 
+  parentName.trim().length > 0 && 
+  parentPhone.trim().length > 0;
 
   const handleFinalConfirm = () => {
     onConfirm({
@@ -104,8 +108,12 @@ const AllocationDialog = ({
               <h2 className="text-lg font-bold text-foreground">Allocate Room</h2>
               <p className="text-sm text-muted-foreground">For {studentName}</p>
             </div>
-            <button onClick={onClose} className="p-2 rounded-lg hover:bg-secondary text-muted-foreground">
-              <X size={20} />
+            <button 
+              onClick={onClose} 
+              className="p-2 rounded-lg hover:bg-secondary text-muted-foreground"
+              aria-label="Close dialog"
+            >
+              <X size={20} aria-hidden="true" />
             </button>
           </div>
 
@@ -133,20 +141,26 @@ const AllocationDialog = ({
                   </label>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {availableRooms.map(room => (
-                      <button
-                        key={room.id}
-                        onClick={() => handleRoomSelect(room.id)}
-                        className={`p-3 rounded-xl border text-left transition-all ${
-                          selectedRoom === room.id
-                            ? "border-primary bg-primary/5 ring-2 ring-primary/20"
-                            : "border-border hover:border-primary/30"
-                        }`}
-                      >
-                        <div className="font-medium text-sm text-foreground">Room {room.id}</div>
-                        <div className="text-xs text-muted-foreground">{room.type} · {room.floor} Floor</div>
-                        <div className="text-sm font-bold text-primary mt-1">₹{room.price.toLocaleString()}/mo</div>
-                      </button>
+<button
+    key={room.id || room.roomNumber}
+    onClick={() => handleRoomSelect(room.id || room.roomNumber)}
+    className={`p-3 rounded-xl border text-left transition-all ${
+      selectedRoom === (room.id || room.roomNumber)
+        ? "border-primary bg-primary/5 ring-2 ring-primary/20"
+        : "border-border hover:border-primary/30"
+    }`}
+  >
+    <div className="font-medium text-sm text-foreground">Room {room.roomNumber || room.id}</div>
+    <div className="text-xs text-muted-foreground">{room.type} · {room.floor} Floor</div>
+    <div className="text-sm font-bold text-primary mt-1">₹{room.price.toLocaleString()}/mo</div>
+  </button>
                     ))}
+                    {availableRooms.length === 0 && (
+  <div className="col-span-full p-8 text-center text-muted-foreground bg-secondary/20 rounded-xl border border-dashed">
+    <p className="text-sm font-medium">No vacant rooms available.</p>
+    <p className="text-xs">All rooms in this property are currently occupied.</p>
+  </div>
+)}
                   </div>
                 </div>
 
@@ -225,19 +239,36 @@ const AllocationDialog = ({
                     </label>
                     <Input value={parentName} onChange={e => setParentName(e.target.value)} placeholder="Father/Guardian name" className="rounded-xl" />
                   </div>
+                 <div>
                   <div>
-                    <label className="text-sm font-medium text-foreground mb-1 flex items-center gap-2">
-                      <Phone size={14} className="text-primary" /> Parent Phone *
-                    </label>
-                    <Input value={parentPhone} onChange={e => setParentPhone(e.target.value)} placeholder="+91 XXXXX XXXXX" className="rounded-xl" />
-                  </div>
+                  <label className="text-sm font-medium text-foreground mb-1 flex items-center gap-2">
+                    <Phone size={14} className="text-primary" /> Parent Phone *
+                  </label>
+                  <Input 
+                    value={parentPhone} 
+                    onChange={e => setParentPhone(e.target.value)} 
+                    placeholder="+91 XXXXX XXXXX" 
+                    className="rounded-xl"
+                    aria-label="Parent phone number"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-2 block">
+                    Room: <span className="font-medium text-foreground">
+                      {roomData?.roomNumber || selectedRoom} ({roomData?.type || "N/A"})
+                    </span>
+                  </label>
+                </div>
+                </div>
+
                 </div>
 
                 <div>
                   <label className="text-sm font-medium text-foreground mb-1 flex items-center gap-2">
                     <Heart size={14} className="text-destructive" /> Medical Information
                   </label>
-                  <Textarea value={medicalInfo} onChange={e => setMedicalInfo(e.target.value)} placeholder="Allergies, conditions, emergency contacts..." className="rounded-xl" rows={2} />
+                  <Textarea value={medicalInfo} onChange={e => setMedicalInfo(e.target.value)} placeholder="Allergies, conditions, emergency contacts..." className="rounded-xl" rows={2} aria-label="Medical information" />
                 </div>
 
                 <div>
@@ -245,7 +276,7 @@ const AllocationDialog = ({
                     <FileText size={14} className="text-primary" /> Identity Document
                   </label>
                   <label className="flex items-center gap-3 p-4 border-2 border-dashed border-border rounded-xl cursor-pointer hover:border-primary/30 transition-colors">
-                    <Upload size={20} className="text-muted-foreground" />
+                    <Upload size={20} className="text-muted-foreground" aria-hidden="true" />
                     <div>
                       <p className="text-sm font-medium text-foreground">{idDocument ? idDocument.name : "Upload Aadhar/ID Card"}</p>
                       <p className="text-xs text-muted-foreground">PDF, JPG, PNG (Max 5MB)</p>
@@ -261,12 +292,18 @@ const AllocationDialog = ({
                   <Textarea value={notes} onChange={e => setNotes(e.target.value)} placeholder="Any extra info about the student..." className="rounded-xl" rows={2} />
                 </div>
 
-                <div className="flex justify-between">
-                  <Button variant="outline" onClick={() => setStep(1)} className="rounded-xl">← Back</Button>
-                  <Button onClick={() => setStep(3)} disabled={!canProceedStep2} className="gradient-primary text-primary-foreground rounded-xl px-6">
-                    Next: Review →
-                  </Button>
-                </div>
+<div className="flex justify-between">
+  <Button variant="outline" onClick={() => setStep(1)} className="rounded-xl">
+    ← Back
+  </Button>
+  <Button 
+    onClick={() => setStep(3)} // This MUST be setStep(3)
+    disabled={!canProceedStep2} 
+    className="gradient-primary text-primary-foreground rounded-xl px-6"
+  >
+    Next: Review →
+  </Button>
+</div>
               </motion.div>
             )}
 
@@ -277,7 +314,12 @@ const AllocationDialog = ({
                   <div className="grid grid-cols-2 gap-3 text-sm">
                     <div><span className="text-muted-foreground">Student:</span> <span className="font-medium text-foreground">{studentName}</span></div>
                     <div><span className="text-muted-foreground">Phone:</span> <span className="font-medium text-foreground">{studentPhone}</span></div>
-                    <div><span className="text-muted-foreground">Room:</span> <span className="font-medium text-foreground">{selectedRoom} ({roomData?.type})</span></div>
+                    <div>
+  <span className="text-muted-foreground">Room:</span>{" "}
+  <span className="font-medium text-foreground">
+    {roomData?.roomNumber || selectedRoom} ({roomData?.type || "N/A"})
+  </span>
+</div>
                     <div><span className="text-muted-foreground">Rent:</span> <span className="font-medium text-primary">₹{Number(price).toLocaleString()}/mo</span></div>
                     <div><span className="text-muted-foreground">Start Date:</span> <span className="font-medium text-foreground">{startDate}</span></div>
                     <div><span className="text-muted-foreground">Payment To:</span> <span className="font-medium text-foreground">{selectedAccData?.label}</span></div>
@@ -320,8 +362,8 @@ const AllocationDialog = ({
               </div>
               <h3 className="text-lg font-bold text-foreground mb-2">Confirm Allocation?</h3>
               <p className="text-sm text-muted-foreground mb-1">
-                Room <strong>{selectedRoom}</strong> → <strong>{studentName}</strong>
-              </p>
+  Room <strong>{roomData?.roomNumber || selectedRoom}</strong> → <strong>{studentName}</strong>
+</p>
               <p className="text-sm text-muted-foreground mb-6">
                 ₹{Number(price).toLocaleString()}/mo starting {startDate}
               </p>
