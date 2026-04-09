@@ -1,6 +1,7 @@
 export interface Hostel {
   id: string;
   name: string;
+  maleOrFemaleOrQuadruple: "male" | "female" | "quadruple";
   price: number;
   location: string;
   image: string;
@@ -17,6 +18,7 @@ export const hostels: Hostel[] = [
   {
     id: "1",
     name: "Sunrise Student Haven",
+    maleOrFemaleOrQuadruple: "male",
     price: 3500,
     location: "Koramangala, Bangalore",
     image: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=600&h=400&fit=crop",
@@ -34,6 +36,7 @@ export const hostels: Hostel[] = [
   {
     id: "2",
     name: "Urban Nest Co-Living",
+    maleOrFemaleOrQuadruple: "male",
     price: 5500,
     location: "HSR Layout, Bangalore",
     image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&h=400&fit=crop",
@@ -51,6 +54,7 @@ export const hostels: Hostel[] = [
   {
     id: "3",
     name: "GreenView PG",
+    maleOrFemaleOrQuadruple: "female",
     price: 3000,
     location: "BTM Layout, Bangalore",
     image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&h=400&fit=crop",
@@ -67,6 +71,7 @@ export const hostels: Hostel[] = [
   {
     id: "4",
     name: "TechHub Residency",
+    maleOrFemaleOrQuadruple: "quadruple",
     price: 4500,
     location: "Whitefield, Bangalore",
     image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&h=400&fit=crop",
@@ -84,6 +89,7 @@ export const hostels: Hostel[] = [
   {
     id: "5",
     name: "Comfort Stay PG",
+    maleOrFemaleOrQuadruple: "male",
     price: 3800,
     location: "Indiranagar, Bangalore",
     image: "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=600&h=400&fit=crop",
@@ -100,6 +106,7 @@ export const hostels: Hostel[] = [
   {
     id: "6",
     name: "Scholar's Den",
+    maleOrFemaleOrQuadruple: "female",
     price: 2800,
     location: "Electronic City, Bangalore",
     image: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=600&h=400&fit=crop",

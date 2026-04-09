@@ -20,6 +20,23 @@ const StudentDashboard = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) setSearchImage(e.target.files[0]);
   };
+  const hostelTypeConfig: Record<
+  "male" | "female" | "quadruple",
+  { label: string; style: string }
+> = {
+  male: {
+    label: "👨 Male",
+    style: "bg-blue-100 text-blue-700 border border-blue-200",
+  },
+  female: {
+    label: "👩 Female",
+    style: "bg-pink-100 text-pink-700 border border-pink-200",
+  },
+  quadruple: {
+    label: "👥 Quad",
+    style: "bg-green-100 text-green-700 border border-green-200",
+  },
+};
 
   return (
     <div className="min-h-screen bg-background">
@@ -157,6 +174,11 @@ const StudentDashboard = () => {
                   <img src={hostel.image} alt={hostel.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   <div className="absolute top-3 right-3 gradient-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full">
                     {hostel.matchPercent}% match
+                  </div>
+                  <div
+                  className={`absolute top-12 right-3 text-xs font-semibold px-3 py-1 rounded-full shadow-sm backdrop-blur-sm ${
+                  hostelTypeConfig[hostel.maleOrFemaleOrQuadruple].style}`}>
+                  {hostelTypeConfig[hostel.maleOrFemaleOrQuadruple].label}
                   </div>
                 </div>
                 <div className="p-5">

@@ -17,6 +17,7 @@ const HostelDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [bookingOpen, setBookingOpen] = useState(false);
+  const [visitingOpen, setVisitingOpen] = useState(false);
   const hostel = hostels.find((h) => h.id === id);
 
   if (!hostel) return <div className="p-8 text-center text-muted-foreground">Hostel not found.</div>;
@@ -151,10 +152,84 @@ const HostelDetail = () => {
                   </div>
                 </DialogContent>
               </Dialog>
+                <Dialog open={visitingOpen} onOpenChange={setVisitingOpen}>
+  <DialogTrigger asChild>
+    <Button variant="outline" className="w-full rounded-xl h-11 gap-2">
+      <CalendarCheck size={16} /> Schedule Visit
+    </Button>
+  </DialogTrigger>
 
-              <Button variant="outline" className="w-full rounded-xl h-11 gap-2">
-                <CalendarCheck size={16} /> Schedule Visit
-              </Button>
+  <DialogContent className="rounded-2xl max-w-md">
+    <DialogHeader>
+    <DialogTitle>Schedule a Visit</DialogTitle>
+    </DialogHeader>
+
+      <div className="space-y-4 pt-4">
+      {/* Name */}
+        <div>
+          <label className="text-sm font-medium text-foreground mb-1 block">
+              Your Name
+          </label>
+            <Input placeholder="Enter your name" className="rounded-xl" />
+        </div>
+
+        {/* Phone */}
+          <div>
+                    <label className="text-sm font-medium text-foreground mb-1 block">
+                      Phone Number
+                    </label>
+                    <Input type="tel" placeholder="Enter phone number" className="rounded-xl" />
+                  </div>
+
+                  {/* Date */}
+                  <div>
+                    <label className="text-sm font-medium text-foreground mb-1 block">
+                                 Visit Date
+                    </label>
+                    <Input type="date" className="rounded-xl" />
+                  </div>
+
+                  {/* Time Slots */}
+                  <div>
+                    <label className="text-sm font-medium text-foreground mb-2 block">
+                      Select Time Slot
+                    </label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {["10:00 AM", "12:00 PM", "2:00 PM", "4:00 PM", "6:00 PM"].map((time) => (
+                        <button
+                          key={time}
+                          className="text-xs px-3 py-2 rounded-xl border hover:border-primary hover:text-primary transition"
+                        >
+                          {time}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                    
+                  {/* Notes */}
+                  <div>
+                    <label className="text-sm font-medium text-foreground mb-1 block">
+                      Notes (optional)
+                    </label>
+                    <Input placeholder="Any special request..." className="rounded-xl" />
+                  </div>
+                    
+                  {/* Info Box */}
+                  <div className="bg-secondary rounded-xl p-3 text-xs text-muted-foreground">
+                    Our team will confirm your visit within a few hours via call or SMS.
+                  </div>
+                    
+                  {/* Submit */}
+                  <Button
+                    className="w-full gradient-primary text-primary-foreground rounded-xl"
+                    onClick={() => setVisitingOpen(false)}
+                  >
+                    Confirm Visit
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+  
             </div>
           </div>
         </div>

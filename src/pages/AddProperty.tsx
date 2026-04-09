@@ -26,6 +26,7 @@ const AddProperty = () => {
 
   const [form, setForm] = useState({
     name: "",
+    maleOrFemaleOrQuadruple: "male" as "male" | "female" | "quadruple",
     type: "hostel" as "hostel" | "pg" | "apartment",
     address: "",
     city: "",
@@ -149,6 +150,16 @@ const AddProperty = () => {
                   <option value="hostel">Hostel</option>
                   <option value="pg">PG (Paying Guest)</option>
                   <option value="apartment">Apartment</option>
+                </select>
+                <label className="text-sm font-medium text-foreground">Accomodation For *</label>
+                <select
+                  value={form.maleOrFemaleOrQuadruple}
+                  onChange={e => setForm(p => ({ ...p, maleOrFemaleOrQuadruple: e.target.value as typeof form.maleOrFemaleOrQuadruple }))}
+                  className="w-full h-10 rounded-xl border border-input bg-background px-3 text-sm"
+                >
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="quadruple">Quadruple</option>
                 </select>
               </div>
               <div className="space-y-2">
